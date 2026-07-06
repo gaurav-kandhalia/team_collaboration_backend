@@ -23,3 +23,4 @@ insert into users (name,email,password) values
 VALUES (...)
 ON CONFLICT (email)
 DO NOTHING;
+
