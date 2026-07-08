@@ -9,7 +9,7 @@ const validate = (schema) => {
         }catch (error) {
             return res.status(400).json({ 
                 success: false,
-                messagge:"validation failed",
+                message:"validation failed",
                 error: error.errors
             });
         }

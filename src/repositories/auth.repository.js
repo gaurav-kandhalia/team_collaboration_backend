@@ -18,6 +18,21 @@ const findByEmail = async (email) => {
    
 }
 
+const createUser = async ({ name, email, password }) => {
+    const query = `
+    insert into users 
+    (name,
+    email,
+    password)
+    values ($1, $2, $3)
+    returning id, name, email, is_active
+    `;
+    const values = [name, email, password];
+    const result = await pool.query(query, values);
+    return result.rows[0] || null;
+};
+
 module.exports = {
-    findByEmail
+    findByEmail,
+    createUser
 };
