@@ -13,3 +13,7 @@ const registerUser = async ({ name, email, password }) => {
     const newUser = await authRepository.createUser({ name, email, password: hashedPassword });
     return newUser;
 }
+
+module.exports = {
+    registerUser
+};
