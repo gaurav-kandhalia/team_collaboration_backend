@@ -1,5 +1,5 @@
 
-const { registerUser } = require('../service/auth.service');
+const { registerUser,loginUser } = require('../service/auth.service');
 const ApiResopnse = require('../utils/ApiResponse');
 const asyncHandler = require('../utils/asyncHandler');
 
@@ -25,8 +25,32 @@ const register = asyncHandler(async (req, res) => {
 }
 );
 
+const login = asyncHandler(async (req, res) => {
+    const {
+        email,
+        password
+    } = req.validatedData;
+
+    const user = await loginUser({
+        email,
+        password
+    });
+    return res.status(200)
+        .json(
+            new ApiResponse({
+                statusCode : 200,
+                message: 'User logged in successfully',
+                data: user
+            })
+        )
+}
+);
+   
+    
+
+
 module.exports = {
-    register
+    register,login
 };
 
 

@@ -32,6 +32,8 @@ const createUser = async ({ name, email, password }) => {
     return result.rows[0] || null;
 };
 
+
+
 module.exports = {
     findByEmail,
     createUser
