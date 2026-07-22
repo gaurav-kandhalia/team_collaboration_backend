@@ -1,10 +1,11 @@
 const {Pool} = require('pg');
 
-
-const connectDatabse = async () => {
-    const pool = new Pool({
-        connectionString: process.env.DATABASE_URL,
+ const pool = new Pool({
+        connectionString: process.env.DB_URL,
     })
+const connectDatabse = async () => {
+    
+ 
     let connection;
 
     try {
@@ -20,11 +21,11 @@ const connectDatabse = async () => {
         }
     }
 
-    return pool;
+
 }
 
 
 
 
 
-module.exports = connectDatabse;
+module.exports = {connectDatabse,pool};

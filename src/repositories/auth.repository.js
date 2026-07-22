@@ -1,4 +1,5 @@
-const pool = require('../config/db.config');
+
+const {pool} = require('../config/db');
 
 const findByEmail = async (email) => {
   
@@ -12,6 +13,9 @@ const findByEmail = async (email) => {
     from users
     where email = $1
     `;
+
+    
+
     const values = [email];
     const result = await pool.query(query, values);
     return result.rows[0] || null;

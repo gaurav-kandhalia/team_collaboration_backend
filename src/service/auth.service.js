@@ -1,6 +1,7 @@
 const authRepository = require('../repositories/auth.repository.js')
 const bcrypt = require('bcrypt');
 const ApiError = require('../utils/ApiError.js');
+const { generateAccessToken } = require('../utils/generateJWT.js');
 
 const registerUser = async ({ name, email, password }) => {
     const existingUser = await authRepository.findByEmail(email);
@@ -28,7 +29,9 @@ const loginUser = async ({ email, password }) => {
 
        const {password :_, ...user} = existingUser;
 
-      return user ;
+      const accessToken = generateAccessToken({ userId: user.id });
+
+      return { ...user, accessToken };
 };
 
 module.exports = {
