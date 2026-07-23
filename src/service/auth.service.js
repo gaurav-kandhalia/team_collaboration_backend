@@ -7,7 +7,8 @@ const registerUser = async ({ name, email, password }) => {
     const existingUser = await authRepository.findByEmail(email);
 
     if (existingUser) {
-        throw new ApiError('User already exists',401);
+     
+        throw new ApiError({ statusCode: 400, message: 'Email already exists', errors: [] });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -20,11 +21,11 @@ const loginUser = async ({ email, password }) => {
       const existingUser = await authRepository.findByEmail(email);
 
       if(!existingUser) {
-        throw new ApiError('Invalid email or password', 401);
+        throw new ApiError({ statusCode: 401, message: 'Invalid email or password', errors: [] });
       }
       const isMatch = await bcrypt.compare(password, existingUser.password);
       if (!isMatch) {
-        throw new ApiError('Invalid email or password', 401);
+        throw new ApiError({ statusCode: 401, message: 'Invalid email or password', errors: [] });
       }
 
        const {password :_, ...user} = existingUser;

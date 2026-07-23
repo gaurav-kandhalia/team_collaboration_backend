@@ -6,6 +6,8 @@ const errorHandler = (err, req, res, next) => {
 
      let errorResponse = {}
      if(err instanceof ApiError){
+
+      
            errorResponse = {
             success: false,
             message: err.message,

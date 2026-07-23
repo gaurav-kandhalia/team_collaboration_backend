@@ -37,7 +37,7 @@ const login = asyncHandler(async (req, res) => {
     });
     return res.status(200)
         .json(
-            new ApiResponse({
+            new ApiResopnse({
                 statusCode : 200,
                 message: 'User logged in successfully',
                 data: user
