@@ -37,8 +37,23 @@ const createUser = async ({ name, email, password }) => {
 };
 
 
+const findById = async (id) => {
+    const query = `
+    select
+    id ,
+    name,
+    email,
+    is_active
+    from users
+    where id = $1
+    `;
+    const values = [id];
+    const result = await pool.query(query, values);
+    return result.rows[0] || null;
+};
 
 module.exports = {
     findByEmail,
-    createUser
+    createUser,
+    findById
 };
