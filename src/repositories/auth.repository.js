@@ -43,7 +43,8 @@ const findById = async (id) => {
     id ,
     name,
     email,
-    is_active
+    is_active,
+    created_at,
     from users
     where id = $1
     `;

@@ -1,11 +1,13 @@
-const {findUserById} = require('../services/user.service');
+const {findUserById} = require('../service/user.service');
 const ApiError = require('../utils/ApiError');
 const asyncHandler = require('../utils/asyncHandler');
+const jwt = require('jsonwebtoken')
 
 
 const authenticate  = asyncHandler(async (req, res, next) => {
     const authHeader = req.headers.authorization;
     let accessToken ;
+    
 
     if(!authHeader || !authHeader.startsWith('Bearer ')) {
         throw new ApiError('Authorization header missing or malformed', 401);
@@ -15,9 +17,15 @@ const authenticate  = asyncHandler(async (req, res, next) => {
     if(!token) {
         throw new ApiError('unathorized request', 401);
     }
+      
+    
 
     try {
+
+        
+      
        accessToken  = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+       console.log("accessToken",accessToken)
         
     } catch (error) {
         throw new ApiError('Invalid or expired token', 401);
@@ -30,6 +38,7 @@ const authenticate  = asyncHandler(async (req, res, next) => {
     }
 
     const user = await findUserById(userId);
+    console.log("user ",user)
     if(!user) {
         throw new ApiError('unauthorized request', 401);
     }
