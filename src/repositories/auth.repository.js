@@ -49,7 +49,10 @@ const findById = async (id) => {
     where id = $1
     `;
     const values = [id];
+    console.log("values",values)
+    console.log("query",query)
     const result = await pool.query(query, values);
+    console.log("result",result)
     return result.rows[0] || null;
 };
 

@@ -25,22 +25,24 @@ const authenticate  = asyncHandler(async (req, res, next) => {
         
       
        accessToken  = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
-       console.log("accessToken",accessToken)
+       
         
     } catch (error) {
-        throw new ApiError('Invalid or expired token', 401);
+   
+        throw new ApiError(401,"unauthorized Request");
     }
 
     
     const userId = accessToken?.userId;
+   
     if(!userId) {
-        throw new ApiError('Invalid access token or token expired', 401);
+        throw new ApiError(401,'unauthorized Request  ');
     }
-
+ 
     const user = await findUserById(userId);
-    console.log("user ",user)
+  
     if(!user) {
-        throw new ApiError('unauthorized request', 401);
+        throw new ApiError(401,"unauthorized Request");
     }
     req.user = user;
     next();
