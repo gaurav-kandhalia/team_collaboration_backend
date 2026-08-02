@@ -44,13 +44,12 @@ const findById = async (id) => {
     name,
     email,
     is_active,
-    created_at,
+    created_at
     from users
     where id = $1
     `;
     const values = [id];
-    console.log("values",values)
-    console.log("query",query)
+ 
     const result = await pool.query(query, values);
     console.log("result",result)
     return result.rows[0] || null;
