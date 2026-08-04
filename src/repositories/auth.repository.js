@@ -55,8 +55,20 @@ const findById = async (id) => {
     return result.rows[0] || null;
 };
 
+const createUserSession = async ({ userId, hashedRefreshToken, expiresAt, deviceInfo }) => {
+    const query = `
+    insert into user_session (user_id,hashed_refresh_token,expires_at,device_info,is_revoked)
+    values ($1, $2, $3, $4, $5)
+    returning *
+    `;
+    const values = [userId, hashedRefreshToken, expiresAt, deviceInfo, false];
+    const result = await pool.query(query, values);
+    return result.rows[0] || null;
+};
+
 module.exports = {
     findByEmail,
     createUser,
-    findById
+    findById,
+    createUserSession
 };
