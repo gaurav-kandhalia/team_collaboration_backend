@@ -1,5 +1,5 @@
 
-const pool = require('../config/db');
+const {pool} = require('../config/db');
 
 const createUserSession = async({
     userId,

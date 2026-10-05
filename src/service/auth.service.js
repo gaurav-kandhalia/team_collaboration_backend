@@ -2,6 +2,8 @@ const authRepository = require('../repositories/auth.repository.js')
 const bcrypt = require('bcrypt');
 const ApiError = require('../utils/ApiError.js');
 const { generateAccessToken, generateRefreshToken } = require('../utils/generateJWT.js');
+const jwt = require('jsonwebtoken');
+const {createUserSession} = require('../repositories/session.repository.js')
 
 const registerUser = async ({ name, email, password }) => {
   const existingUser = await authRepository.findByEmail(email);
@@ -17,7 +19,7 @@ const registerUser = async ({ name, email, password }) => {
   return newUser;
 }
 
-const loginUser = async ({ email, password }) => {
+const loginUser = async ({ email, password,deviceInfo }) => {
   const existingUser = await authRepository.findByEmail(email);
 
   if (!existingUser) {
@@ -32,17 +34,28 @@ const loginUser = async ({ email, password }) => {
 
   const accessToken = generateAccessToken({ userId: user.id });
   const refreshToken = generateRefreshToken({ userId: user.id });
-  const hashedRefreshToken = await bcrypt.hash(refreshToken, 10);
-  const expiresAt = new Date(Date.now() + parseInt(process.env.REFRESH_TOKEN_EXPIRY) * 24 * 60 * 60 * 1000); 
- 
 
-  await authRepository.createUserSession({ userId: user.id, hashedRefreshToken, expiresAt, deviceInfo });
+  const decodedRefreshToken = jwt.decode(refreshToken);
 
 
+  const expiresAt = new Date(decodedRefreshToken.exp * 1000); // Convert to milliseconds
+  
+  console.log('Refresh Token Expiration Date:', expiresAt);
+  const hashedRefreshToken = await bcrypt.hash(refreshToken,10);
 
 
 
-  return { ...user, accessToken, refreshToken };
+   console.log("userId:", user.id);
+   console.log("hashedRefreshToken:", hashedRefreshToken);
+   console.log("expiresAt:", expiresAt);
+   console.log("deviceInfo:", deviceInfo);
+  await createUserSession({
+     userId: user.id, 
+     hashedRefreshToken, 
+     expiresAt, 
+     deviceInfo });
+
+  return { ...user, accessToken,refreshToken };
 };
 
 module.exports = {

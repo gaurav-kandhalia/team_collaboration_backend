@@ -30,10 +30,14 @@ const login = asyncHandler(async (req, res) => {
         email,
         password
     } = req.validatedData;
+ 
+    const deviceInfo = req.headers["user-agent"] || "Unknown Device";
+    
 
     const user = await loginUser({
         email,
-        password
+        password,
+        deviceInfo
     });
     return res.status(200)
         .json(
@@ -45,12 +49,6 @@ const login = asyncHandler(async (req, res) => {
         )
 }
 );
-
-
-
-   
-    
-
 
 module.exports = {
     register,login
